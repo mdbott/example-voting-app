@@ -6,7 +6,7 @@ class VotingTasks(TaskSet):
     def vote(self,vt):
         self.client.post("/",{"vote":vt})
 
-    # initial random vote between cats or dogs
+    # semi random vote between cats or dogs 40% cats 60% dogs
     @task(2)
     def votecat(self):
         self.vote("a")

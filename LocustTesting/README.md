@@ -1,9 +1,9 @@
-# Lad Testing for the Example Voting App
+# Load Testing for the Example Voting App
 
 
 # install
 
-run pip3 install MyVoteLocust
+pip3 install locust
 
 # run
 
