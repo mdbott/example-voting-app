@@ -1,6 +1,6 @@
 {
   "name": "result",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -13,6 +13,9 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
+    "express-statsd": "^0.3.0",
+    "response-time": "^2.3.2",
+    "node-statsd": "^0.1.1",
     "method-override": "^3.0.0",
     "pg": "^8.8.0",
     "socket.io": "^2.5.0",

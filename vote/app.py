@@ -5,12 +5,16 @@ import socket
 import random
 import json
 import logging
+import time
+from datetime import datetime
+from statsd import StatsClient
 
 option_a = os.getenv('OPTION_A', "Cats")
 option_b = os.getenv('OPTION_B', "Dogs")
 hostname = socket.gethostname()
 
 app = Flask(__name__)
+statsd = StatsClient('127.0.0.1',8125)
 
 gunicorn_error_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers.extend(gunicorn_error_logger.handlers)
@@ -22,6 +26,7 @@ def get_redis():
     return g.redis
 
 @app.route("/", methods=['POST','GET'])
+@statsd.timer('vote')
 def hello():
     voter_id = request.cookies.get('voter_id')
     if not voter_id:

@@ -10,7 +10,7 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    healthcheck: 
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 15s
       timeout: 5s
@@ -20,6 +20,8 @@ services:
      - ./vote:/app
     ports:
       - "5000:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - front-tier
       - back-tier
@@ -30,12 +32,14 @@ services:
     entrypoint: nodemon server.js
     depends_on:
       db:
-        condition: service_healthy 
+        condition: service_healthy
     volumes:
       - ./result:/app
     ports:
       - "5001:80"
       - "5858:5858"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - front-tier
       - back-tier
@@ -45,14 +49,14 @@ services:
       context: ./worker
     depends_on:
       redis:
-        condition: service_healthy 
+        condition: service_healthy
       db:
-        condition: service_healthy 
+        condition: service_healthy
     networks:
       - back-tier
 
   redis:
-    image: redis:alpine
+    image: docker.io/redis:alpine
     volumes:
       - "./healthchecks:/healthchecks"
     healthcheck:
@@ -62,7 +66,7 @@ services:
       - back-tier
 
   db:
-    image: postgres:15-alpine
+    image: docker.io/postgres:15-alpine
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
@@ -83,7 +87,7 @@ services:
     profiles: ["seed"]
     depends_on:
       vote:
-        condition: service_healthy 
+        condition: service_healthy
     networks:
       - front-tier
     restart: "no"

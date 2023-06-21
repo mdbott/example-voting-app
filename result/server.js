@@ -8,7 +8,23 @@ var express = require('express'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
+    io = require('socket.io')(server),
+    responseTime = require('response-time'),
+    StatsD = require('node-statsd');
+
+var stats = new StatsD('127.0.0.1',8125,'result.')
+
+
+stats.socket.on('error', function (error) {
+  console.error(error.stack)
+})
+
+app.use(responseTime(function (req, res, time) {
+  var stat = (req.method + req.url).toLowerCase()
+    .replace(/[:.]/g, '')
+    .replace(/\//g, '_')
+  stats.timing(stat, time)
+}))
 
 io.set('transports', ['polling']);
 
